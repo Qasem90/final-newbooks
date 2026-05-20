@@ -5,7 +5,9 @@ import { neon } from '@neondatabase/serverless';
 import { DATABASE_URL } from '$env/static/private';
 
 const sql = neon(DATABASE_URL);
-// SvelteKit calls this function whenever the page is requested.
+git add .
+git commit -m "3.5 - final commit, app complete"
+git push origin main// SvelteKit calls this function whenever the page is requested.
 // Whatever object we return becomes available to +page.svelte as `data`.
 export async function load() {
   // Add this BELOW your load() function in +page.server.js.
