@@ -2,13 +2,22 @@
   // An array of transaction objects.
   // Add this INSIDE the <script> block, below the transactions array.
 function classify(t) {
-  if (t.credit === 'Revenue') {
-    return 'Revenue';
-  } else if (t.debit.includes('Expense')) {
-    return 'Expense';
-  } else {
-    return 'Other';
-  }
+  // Add these THREE derived totals to your <script> block,
+// below the classify() function.
+
+let totalRevenue = $derived(
+  transactions
+    .filter(t => classify(t) === 'Revenue')
+    .reduce((sum, t) => sum + t.amount, 0)
+);
+
+let totalExpenses = $derived(
+  transactions
+    .filter(t => classify(t) === 'Expense')
+    .reduce((sum, t) => sum + t.amount, 0)
+);
+
+let netIncome = $derived(totalRevenue - totalExpenses);
 }
   // Square brackets. Each item is a full object. Commas between items.
   // Each transaction has a unique id so Svelte can track it efficiently in the list.
@@ -109,21 +118,22 @@ function classify(t) {
   <!-- INCOME STATEMENT -->
   <section class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
     <h2 class="text-xl font-bold text-slate-800 mb-4">Income Statement</h2>
-
-    <div class="space-y-2">
-      <div class="flex justify-between text-emerald-700 font-medium">
-        <span>Total Revenue</span>
-        <span>$0.00</span>
-      </div>
-      <div class="flex justify-between text-rose-700 font-medium">
-        <span>Total Expenses</span>
-        <span>$0.00</span>
-      </div>
-      <div class="flex justify-between border-t border-slate-300 pt-2 text-lg font-bold">
-        <span>Net Income</span>
-        <span>$0.00</span>
-      </div>
-    </div>
+ <div class="space-y-2">
+  <div class="flex justify-between text-emerald-700 font-medium">
+    <span>Total Revenue</span>
+    <span>${totalRevenue.toFixed(2)}</span>
+  </div>
+  <div class="flex justify-between text-rose-700 font-medium">
+    <span>Total Expenses</span>
+    <span>${totalExpenses.toFixed(2)}</span>
+  </div>
+  <div class="flex justify-between border-t border-slate-300 pt-2 text-lg font-bold">
+    <span>Net Income</span>
+    <span class={netIncome >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
+      ${netIncome.toFixed(2)}
+    </span>
+  </div>
+</div>
   </section>
 
   <!-- TRANSACTIONS LIST -->
